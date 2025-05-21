@@ -17,6 +17,10 @@ public class StudentService {
         return studentDao.save(student);
     }
 
+    public int updateStudent(Student student){
+        return studentDao.update(student);
+    }
+
     public int deleteStudent(Integer id) {
         return studentDao.delete(id);
     }
