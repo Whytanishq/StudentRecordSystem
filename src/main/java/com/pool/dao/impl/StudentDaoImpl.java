@@ -51,18 +51,18 @@ public class StudentDaoImpl implements StudentDao {
     public int update(Student student) {
         String sql = "UPDATE students SET first_name=?, last_name=?, email=?, date_of_birth=?, enrollment_date=?, course=?, gpa=? WHERE id=?";
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, student.getFirstName());
-            pstmt.setString(2, student.getLastName());
-            pstmt.setString(3, student.getEmail());
-            pstmt.setDate(4, Date.valueOf(student.getDateOfBirth()));
-            pstmt.setDate(5, Date.valueOf(student.getEnrollmentDate()));
-            pstmt.setString(6, student.getCourse());
-            pstmt.setDouble(7, student.getGpa());
-            pstmt.setInt(8, student.getId());
+            stmt.setString(1, student.getFirstName());
+            stmt.setString(2, student.getLastName());
+            stmt.setString(3, student.getEmail());
+            stmt.setDate(4, Date.valueOf(student.getDateOfBirth()));
+            stmt.setDate(5, Date.valueOf(student.getEnrollmentDate()));
+            stmt.setString(6, student.getCourse());
+            stmt.setDouble(7, student.getGpa());
+            stmt.setInt(8, student.getId());
 
-            return pstmt.executeUpdate();
+            return stmt.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException("Failed to update student", e);
@@ -73,10 +73,10 @@ public class StudentDaoImpl implements StudentDao {
     public int delete(Integer id) {
         String sql = "DELETE FROM students WHERE id=?";
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, id);
-            return pstmt.executeUpdate();
+            stmt.setInt(1, id);
+            return stmt.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException("Failed to delete student", e);
@@ -87,10 +87,10 @@ public class StudentDaoImpl implements StudentDao {
     public Optional<Student> findById(Integer id) {
         String sql = "SELECT * FROM students WHERE id=?";
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, id);
-            try (ResultSet rs = pstmt.executeQuery()) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     Student student = mapResultSetToStudent(rs);
                     return Optional.of(student);
@@ -108,8 +108,8 @@ public class StudentDaoImpl implements StudentDao {
         List<Student> students = new ArrayList<>();
 
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 students.add(mapResultSetToStudent(rs));
@@ -127,10 +127,10 @@ public class StudentDaoImpl implements StudentDao {
         List<Student> students = new ArrayList<>();
 
         try (Connection conn = dataSource.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, course);
-            try (ResultSet rs = pstmt.executeQuery()) {
+            stmt.setString(1, course);
+            try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     students.add(mapResultSetToStudent(rs));
                 }
